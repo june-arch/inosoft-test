@@ -2,12 +2,12 @@
 
 ## Installation
 
--Install php versi 8
--Install composer
--Install mongodb driver
--adding in php.ini => extension="mongodb"
--run in terminal root project => composer install
--run in terminal root project => php artisan serve
+- Install php versi 8
+- Install composer
+- Install mongodb driver
+- adding in php.ini => extension="mongodb"
+- run in terminal root project => composer install
+- run in terminal root project => php artisan serve
 
 
 ## About Project
