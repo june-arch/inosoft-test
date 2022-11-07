@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +23,6 @@ Route::get('hello', function (Request $request){
     return "hello world";
 });
 
-Route::resource('posts', PostController::class)->only([
+Route::resource('users', UserController::class)->only([
     'destroy', 'show', 'store', 'update'
  ]);

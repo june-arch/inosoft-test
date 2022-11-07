@@ -166,6 +166,7 @@ return [
          * Package Service Providers...
          */
         Jenssegers\Mongodb\MongodbServiceProvider::class,
+        Webpatser\Uuid\UuidServiceProvider::class,
 
         /*
          * Application Service Providers...
