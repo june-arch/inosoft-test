@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Helper\Wrapper;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\App;
 
 class BasicAuthMiddleware
 {
@@ -19,15 +20,21 @@ class BasicAuthMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-
-        if(!('telkom' == $_SERVER['PHP_AUTH_USER'] && $_SERVER['PHP_AUTH_PW'] == 'da1c25d8-37c8-41b1-afe2-42dd4825bfea')) {
+        if(!(isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW']))){
             return response()->json([
                 "data" => null,
                 "message" => 'Unauthorized',
             ], Response::HTTP_UNAUTHORIZED);
-        }else{
-            return $next($request);
         }
 
+        if(!($_ENV['BASIC_AUTH_USERNAME'] == $_SERVER['PHP_AUTH_USER'] &&
+            $_SERVER['PHP_AUTH_PW'] == $_ENV['BASIC_AUTH_PASSWORD'])) {
+            return response()->json([
+                "data" => null,
+                "message" => 'Unauthorized',
+            ], Response::HTTP_UNAUTHORIZED);
+        }
+
+        return $next($request);
     }
 }
