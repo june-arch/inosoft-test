@@ -9,6 +9,7 @@ use Webpatser\Uuid\Uuid;
 use Illuminate\Support\Facades\Hash;
 use App\Helper\Wrapper;
 use App\Repository\User\EloquentUserRepository;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -109,5 +110,40 @@ class UserController extends Controller
             return $this->wrapper->response($data, $message, $code);
         }
         return $this->wrapper->response($data, 'success delete user');
+    }
+
+    public function register(Request $request){
+        //Validate data
+        $data = $request->only('fullname', 'email', 'no_hp', 'password');
+        $validator = Validator::make($data, [
+            'fullname' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'no_hp' => 'required|regex:/(01)[0-9]{9}/',
+            'password' => 'required|string|min:6|max:50'
+        ]);
+
+        //Send failed response if request is not valid
+        if ($validator->fails()) {
+            return $this->wrapper->response(null, $validator->messages(), Response::HTTP_BAD_REQUEST);
+        }
+
+        ['err'=>$err] = $this->eloquentUser->findByEmail($request->email);
+        if(!$err){
+            return $this->wrapper->response(null, 'email already registered', Response::HTTP_CONFLICT);
+        }
+        $document = [
+            "user_id" => (string) Uuid::generate(),
+            "fullname" => $request->fullname,
+            "email" => $request->email,
+            "no_hp" => $request->no_hp,
+            "password" => Hash::make($request->password, ['rounds' => 12]),
+        ];
+
+        ['data'=>$data, 'err'=>$errCreate] = $this->eloquentUser->create($document);
+        if($errCreate){
+            ['message'=>$message, 'code'=>$code, 'data' => $data] = $errCreate;
+            return $this->wrapper->response($data, $message, $code);
+        }
+        return $this->wrapper->response($data, 'success register user', Response::HTTP_CREATED);
     }
 }

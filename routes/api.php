@@ -19,10 +19,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('hello', function (Request $request){
+Route::middleware('basic.authentication')->get('hello', function (Request $request){
     return "hello world";
 });
-
-Route::resource('users', UserController::class)->only([
-    'destroy', 'show', 'store', 'update', 'index'
- ]);
+Route::post('v1/users/login', [UserController::class, 'authenticate']);
+Route::post('v1/users/register', [UserController::class, 'register']);
+Route::group(['middleware' => ['jwt.verify']], function() {
+    Route::get('v1/users/logout', [UserController::class, 'logout']);
+    Route::resource('v1/users', UserController::class)->only([
+        'destroy', 'show', 'store', 'update', 'index'
+    ]);
+});
