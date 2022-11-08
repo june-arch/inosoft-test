@@ -24,5 +24,5 @@ Route::get('hello', function (Request $request){
 });
 
 Route::resource('users', UserController::class)->only([
-    'destroy', 'show', 'store', 'update'
+    'destroy', 'show', 'store', 'update', 'index'
  ]);
