@@ -31,17 +31,17 @@ Route::group(['middleware' => ['basic.authentication']], function (){
     Route::resource('v1/users', UserController::class)->only([
         'destroy', 'show', 'store', 'update', 'index'
     ]);
-    Route::resource('v1/transaction', TransactionController::class)->only([
-        'destroy', 'show', 'store', 'update', 'index'
-    ]);
     Route::resource('v1/kendaraan', KendaraanController::class)->only([
         'destroy', 'show', 'store', 'update', 'index'
     ]);
+    Route::get('v1/transaction', [TransactionController::class, 'index']);
+    Route::get('v1/transaction/:id', [TransactionController::class, 'show']);
+    Route::post('v1/transaction/callback', [TransactionController::class, 'callback']);
 });
 
 Route::group(['middleware' => ['jwt.verify']], function() {
-    Route::get('v1/users/logout', [UserController::class, 'logout']);
-    Route::get('v1/kendaraan/available', [KendaraanController::class, 'available']);
-    Route::post('v1/transaction/order', [TransactionController::class, 'order']);
-    Route::get('v1/transaction/history', [TransactionController::class, 'history']);
+    Route::get('user/v1/users/logout', [UserController::class, 'logout']);
+    Route::get('user/v1/kendaraan/available', [KendaraanController::class, 'available']);
+    Route::post('user/v1/transaction/order', [TransactionController::class, 'order']);
+    Route::get('user/v1/transaction/history', [TransactionController::class, 'history']);
 });

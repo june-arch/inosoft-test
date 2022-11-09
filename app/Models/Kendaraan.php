@@ -11,6 +11,8 @@ class Kendaraan extends Model
 
     protected $fillable = [
         'kendaraan_id',
+        'name',
+        'slug',
         'tahun_keluaran',
         'warna',
         'harga',
@@ -20,7 +22,9 @@ class Kendaraan extends Model
         'mesin',
         'kapasitas_penumpang',
         'tipe',
-        'stok'
+        'stok',
+        'status',
+        'kode_kendaraan'
     ];
     protected $date = ['created_at','updated_at'];
 }

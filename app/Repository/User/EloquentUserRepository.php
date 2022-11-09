@@ -22,7 +22,7 @@ class EloquentUserRepository implements UserRepository
         try {
             $find = $this->model->skip(($page-1)*$size)->take($size)->project(['_id'=>0,'password'=>0]);
             if($search){
-                $find = $this->model->where('email', 'like', "%{$search}%");
+                $find = $this->model->where('email', 'like', "%{$search}%")->take($size)->project(['_id'=>0,'password'=>0]);
             }
             $result = $find->get();
             if (count($result) == 0) {
